@@ -10,7 +10,7 @@ const { ValidationError, ApiError } = require('../utils/errors');
  */
 const manageContact = async (req, res, next) => {
   try {
-    const { clientName, phoneNumber, tag } = req.query;
+    const { clientName, phoneNumber, tag = 'events -> ve0525vip-flash-link-request' } = req.query;
     
     // Add '+' prefix to phone number
     const formattedPhoneNumber = `+${phoneNumber}`;
