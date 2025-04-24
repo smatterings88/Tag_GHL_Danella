@@ -35,7 +35,7 @@ const manageContact = async (req, res, next) => {
       logger.info(`Contact found with ID: ${existingContact.id}`);
       
       // Add VIP tag to existing contact
-      await ghlService.addTagToContact(existingContact.id, "opted for VIP");
+      await ghlService.addTagToContact(existingContact.id, "events -> ve0525vip-flash-link-request");
       
       return res.status(200).json({
         status: 'success',
@@ -56,7 +56,7 @@ const manageContact = async (req, res, next) => {
     });
     
     // Add VIP tag to new contact
-    await ghlService.addTagToContact(newContact.id, "opted for VIP");
+    await ghlService.addTagToContact(newContact.id, "events -> ve0525vip-flash-link-request");
     
     return res.status(201).json({
       status: 'success',
