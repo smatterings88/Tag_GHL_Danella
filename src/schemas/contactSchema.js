@@ -25,6 +25,14 @@ const contactSchema = Joi.object({
       'string.empty': 'Phone number cannot be empty',
       'string.pattern.base': 'Phone number must contain only digits (e.g., 11234567890)',
       'any.required': 'Phone number is required'
+    }),
+
+  // Optional tag parameter
+  tag: Joi.string()
+    .default('events -> ve0525vip-flash-link-request')
+    .messages({
+      'string.base': 'Tag must be a string',
+      'string.empty': 'Tag cannot be empty'
     })
 }).unknown(false); // Don't allow unknown parameters
 
