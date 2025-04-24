@@ -29,7 +29,7 @@ const contactSchema = Joi.object({
 
   // Optional tag parameter
   tag: Joi.string()
-    .default('events -> ve0525vip-flash-link-request')
+    .optional()
     .messages({
       'string.base': 'Tag must be a string',
       'string.empty': 'Tag cannot be empty'
