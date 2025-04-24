@@ -10,7 +10,7 @@ const { ValidationError, ApiError } = require('../utils/errors');
  */
 const manageContact = async (req, res, next) => {
   try {
-    const { clientName, phoneNumber } = req.query;
+    const { clientName, phoneNumber, tag } = req.query;
     
     // Add '+' prefix to phone number
     const formattedPhoneNumber = `+${phoneNumber}`;
@@ -34,15 +34,16 @@ const manageContact = async (req, res, next) => {
     if (existingContact) {
       logger.info(`Contact found with ID: ${existingContact.id}`);
       
-      // Add VIP tag to existing contact
-      await ghlService.addTagToContact(existingContact.id, "events -> ve0525vip-flash-link-request");
+      // Add tag to existing contact
+      await ghlService.addTagToContact(existingContact.id, tag);
       
       return res.status(200).json({
         status: 'success',
-        message: 'Contact found and tagged as VIP',
+        message: 'Contact found and tagged',
         data: {
           contact: existingContact,
-          isNewContact: false
+          isNewContact: false,
+          appliedTag: tag
         }
       });
     }
@@ -55,15 +56,16 @@ const manageContact = async (req, res, next) => {
       phone: formattedPhoneNumber
     });
     
-    // Add VIP tag to new contact
-    await ghlService.addTagToContact(newContact.id, "events -> ve0525vip-flash-link-request");
+    // Add tag to new contact
+    await ghlService.addTagToContact(newContact.id, tag);
     
     return res.status(201).json({
       status: 'success',
-      message: 'New contact created and tagged as VIP',
+      message: 'New contact created and tagged',
       data: {
         contact: newContact,
-        isNewContact: true
+        isNewContact: true,
+        appliedTag: tag
       }
     });
   } catch (error) {
