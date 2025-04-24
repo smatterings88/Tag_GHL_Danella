@@ -57,13 +57,18 @@ const createContact = async (contactData) => {
   try {
     logger.debug(`Creating new contact: ${JSON.stringify(contactData)}`);
     
+    // Build payload without email by default
     const payload = {
-      email: contactData.email || '',
       phone: contactData.phone,
       firstName: contactData.name.split(' ')[0] || '',
       lastName: contactData.name.split(' ').slice(1).join(' ') || '',
       locationId: config.ghl.locationId
     };
+
+    // Only add email if it exists and is not empty
+    if (contactData.email) {
+      payload.email = contactData.email;
+    }
     
     const response = await ghlApi.post('/contacts', payload);
     
