@@ -45,6 +45,15 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'UP' });
 });
 
+// Add root route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Welcome to the GHL Contact Service',
+    docs: '/api/contacts'
+  });
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
