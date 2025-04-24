@@ -27,19 +27,12 @@ const searchContactByPhone = async (phoneNumber) => {
     // Format query parameter for GHL API
     const formattedPhone = encodeURIComponent(phoneNumber);
     
-    const response = await ghlApi.get(`/locations/${config.ghl.locationId}/contacts/search?query=${formattedPhone}`);
+    const response = await ghlApi.get(`/contacts/lookup?phone=${formattedPhone}&locationId=${config.ghl.locationId}`);
     
-    // Check if any contacts were found
-    if (response.data && response.data.contacts && response.data.contacts.length > 0) {
-      // Find exact match for phone number
-      const exactMatch = response.data.contacts.find(contact => 
-        contact.phone === phoneNumber
-      );
-      
-      if (exactMatch) {
-        logger.info(`Found exact match for phone number: ${phoneNumber}`);
-        return exactMatch;
-      }
+    // Check if contact was found
+    if (response.data && response.data.contact) {
+      logger.info(`Found contact with phone number: ${phoneNumber}`);
+      return response.data.contact;
     }
     
     logger.info(`No contact found with phone number: ${phoneNumber}`);
@@ -68,10 +61,11 @@ const createContact = async (contactData) => {
       email: contactData.email || '',
       phone: contactData.phone,
       firstName: contactData.name.split(' ')[0] || '',
-      lastName: contactData.name.split(' ').slice(1).join(' ') || ''
+      lastName: contactData.name.split(' ').slice(1).join(' ') || '',
+      locationId: config.ghl.locationId
     };
     
-    const response = await ghlApi.post(`/locations/${config.ghl.locationId}/contacts`, payload);
+    const response = await ghlApi.post('/contacts', payload);
     
     if (!response.data || !response.data.contact) {
       throw new ApiError('Failed to create contact', 500);
@@ -99,8 +93,9 @@ const addTagToContact = async (contactId, tag) => {
   try {
     logger.debug(`Adding tag "${tag}" to contact: ${contactId}`);
     
-    const response = await ghlApi.post(`/locations/${config.ghl.locationId}/contacts/${contactId}/tags`, {
-      tags: [tag]
+    const response = await ghlApi.post(`/contacts/${contactId}/tags`, {
+      tags: [tag],
+      locationId: config.ghl.locationId
     });
     
     if (!response.data || response.data.error) {
