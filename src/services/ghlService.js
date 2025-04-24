@@ -24,12 +24,13 @@ const searchContactByPhone = async (phoneNumber) => {
   try {
     logger.debug(`Searching for contact with phone: ${phoneNumber}`);
     
-    // Format query parameter for GHL API
-    const formattedPhone = encodeURIComponent(phoneNumber);
+    const response = await ghlApi.get('/contacts/lookup', {
+      params: {
+        phone: phoneNumber,
+        locationId: config.ghl.locationId
+      }
+    });
     
-    const response = await ghlApi.get(`/contacts/lookup?phone=${formattedPhone}&locationId=${config.ghl.locationId}`);
-    
-    // Check if contact was found
     if (response.data && response.data.contact) {
       logger.info(`Found contact with phone number: ${phoneNumber}`);
       return response.data.contact;
@@ -56,7 +57,6 @@ const createContact = async (contactData) => {
   try {
     logger.debug(`Creating new contact: ${JSON.stringify(contactData)}`);
     
-    // Prepare contact data for GHL API
     const payload = {
       email: contactData.email || '',
       phone: contactData.phone,
