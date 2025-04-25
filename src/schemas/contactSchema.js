@@ -18,6 +18,7 @@ const contactSchema = Joi.object({
   
   // Phone number without the '+' prefix
   phoneNumber: Joi.string()
+    .trim()
     .pattern(/^[1-9]\d{1,14}$/)
     .required()
     .messages({
