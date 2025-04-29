@@ -16,20 +16,20 @@ const contactSchema = Joi.object({
       'any.required': 'Client name is required'
     }),
   
-  // Phone number without the '+' prefix
+  // Phone number with optional '+' prefix
   phoneNumber: Joi.string()
-    .trim()
-    .pattern(/^[1-9]\d{1,14}$/)
+    .pattern(/^\+?[1-9]\d{1,14}$/)
     .required()
     .messages({
       'string.base': 'Phone number must be a string',
       'string.empty': 'Phone number cannot be empty',
-      'string.pattern.base': 'Phone number must contain only digits (e.g., 11234567890)',
+      'string.pattern.base': 'Phone number must be digits (with optional leading +)',
       'any.required': 'Phone number is required'
     }),
 
   // Optional tag parameter
   tag: Joi.string()
+    .min(1)
     .optional()
     .messages({
       'string.base': 'Tag must be a string',
