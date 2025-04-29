@@ -12,8 +12,9 @@ const manageContact = async (req, res, next) => {
   try {
     const { clientName, phoneNumber, tag = 'events -> ve0525vip-flash-link-request' } = req.query;
     
-    // Add '+' prefix to phone number
-    const formattedPhoneNumber = `+${phoneNumber}`;
+    // Strip any leading '+' then re-add it exactly once
+    const rawDigits = phoneNumber.startsWith('+') ? phoneNumber.slice(1) : phoneNumber;
+    const formattedPhoneNumber = `+${rawDigits}`;
     
     logger.info(`Processing contact request for: ${clientName} with phone: ${formattedPhoneNumber}`);
     
